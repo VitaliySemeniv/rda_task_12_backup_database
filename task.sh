@@ -1,13 +1,13 @@
 #!/bin/bash
 
+# Backup повної бази
+mysqldump -u "$DB_USER" -p"$DB_PASSWORD" ShopDB > ShopDBReserve.sql
 
-mysqldump -u backup -pBackupPass123! ShopDB > ShopDBReserve.sql
+# Відновлення повної копії
+mysql -u "$DB_USER" -p"$DB_PASSWORD" ShopDBReserve < ShopDBReserve.sql
 
+# Резервна копія лише даних
+mysqldump -u "$DB_USER" -p"$DB_PASSWORD" --no-create-info ShopDB > ShopDBDevelopment.sql
 
-mysql -u backup -pBackupPass123! ShopDBReserve < ShopDBReserve.sql
-
-
-mysqldump -u backup -pBackupPass123! --no-create-info ShopDB > ShopDBDevelopment.sql
-
-
-mysql -u backup -pBackupPass123! ShopDBDevelopment < ShopDBDevelopment.sql
+# Відновлення даних
+mysql -u "$DB_USER" -p"$DB_PASSWORD" ShopDBDevelopment < ShopDBDevelopment.sql
